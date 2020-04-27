@@ -17,9 +17,9 @@ namespace UCS.Logic
         protected List<DataSlot> m_unitCount;
         protected List<DataSlot> m_unitUpgradeLevel;
 
-        protocted int m_castleLevel = -1;
-        protocted int m_castleTotalCapacity;
-        protocted int m_castleUsedCapacity;
+        protected int m_castleLevel = -1;
+        protected int m_castleTotalCapacity;
+        protected int m_castleUsedCapacity;
         internal int m_townHallLevel;
 
         public Avatar()
@@ -280,29 +280,33 @@ namespace UCS.Logic
 
         public void SetResourceCap(ResourceData rd, int value)
         {
-            int index = GetDataIndex(m_vResourceCaps, rd);
+            int index = GetDataIndex(this.m_resourceCaps, rd);
+
             if (index == -1)
             {
                 DataSlot ds = new DataSlot(rd, value);
-                m_vResourceCaps.Add(ds);
+                m_resourceCaps.Add(ds);
             }
+
             else
             {
-                m_vResourceCaps[index].Value = value;
+                m_resourceCaps[index].Value = value;
             }
         }
 
         public void SetResourceCount(ResourceData rd, int value)
         {
-            int index = GetDataIndex(m_vResources, rd);
+            int index = GetDataIndex(this.m_resources, rd);
+
             if (index == -1)
             {
                 DataSlot ds = new DataSlot(rd, value);
-                m_vResources.Add(ds);
+                m_resources.Add(ds);
             }
+
             else
             {
-                m_vResources[index].Value = value;
+                m_resources[index].Value = value;
             }
         }
 
@@ -311,33 +315,40 @@ namespace UCS.Logic
             switch (cd.GetCombatItemType())
             {
                 case 1:
+                {
+                    int index = GetDataIndex(this.m_spellCount, cd);
+
+                    if (index != -1)
                     {
-                        int index = GetDataIndex(m_vSpellCount, cd);
-                        if (index != -1)
-                        {
-                            m_vSpellCount[index].Value = count;
-                        }
-                        else
-                        {
-                            DataSlot ds = new DataSlot(cd, count);
-                            m_vSpellCount.Add(ds);
-                        }
-                        break;
+                        m_spellCount[index].Value = count;
                     }
+
+                    else
+                    {
+                        DataSlot ds = new DataSlot(cd, count);
+                        m_spellCount.Add(ds);
+                    }
+
+                    break;
+                }
+
                 default:
+                {
+                    int index = GetDataIndex(this.m_unitCount, cd);
+
+                    if (index != -1)
                     {
-                        int index = GetDataIndex(m_vUnitCount, cd);
-                        if (index != -1)
-                        {
-                            m_vUnitCount[index].Value = count;
-                        }
-                        else
-                        {
-                            DataSlot ds = new DataSlot(cd, count);
-                            m_vUnitCount.Add(ds);
-                        }
-                        break;
+                        m_unitCount[index].Value = count;
                     }
+
+                    else
+                    {
+                        DataSlot ds = new DataSlot(cd, count);
+                        m_unitCount.Add(ds);
+                    }
+
+                    break;
+                }
             }
         }
 
@@ -346,47 +357,58 @@ namespace UCS.Logic
             switch (cd.GetCombatItemType())
             {
                 case 2:
+                {
+                    int index = GetDataIndex(this.m_heroUpgradeLevel, cd);
+
+                    if (index != -1)
                     {
-                        int index = GetDataIndex(m_vHeroUpgradeLevel, cd);
-                        if (index != -1)
-                        {
-                            m_vHeroUpgradeLevel[index].Value = level;
-                        }
-                        else
-                        {
-                            DataSlot ds = new DataSlot(cd, level);
-                            m_vHeroUpgradeLevel.Add(ds);
-                        }
-                        break;
+                        m_heroUpgradeLevel[index].Value = level;
                     }
+
+                    else
+                    {
+                        DataSlot ds = new DataSlot(cd, level);
+                        m_heroUpgradeLevel.Add(ds);
+                    }
+
+                    break;
+                }
+
                 case 1:
+                {
+                    int index = GetDataIndex(this.m_spellUpgradeLevel, cd);
+
+                    if (index != -1)
                     {
-                        int index = GetDataIndex(m_vSpellUpgradeLevel, cd);
-                        if (index != -1)
-                        {
-                            m_vSpellUpgradeLevel[index].Value = level;
-                        }
-                        else
-                        {
-                            DataSlot ds = new DataSlot(cd, level);
-                            m_vSpellUpgradeLevel.Add(ds);
-                        }
-                        break;
+                        m_spellUpgradeLevel[index].Value = level;
                     }
+
+                    else
+                    {
+                        DataSlot ds = new DataSlot(cd, level);
+                        m_spellUpgradeLevel.Add(ds);
+                    }
+
+                    break;
+                }
+
                 default:
+                {
+                    int index = GetDataIndex(this.m_unitUpgradeLevel, cd);
+
+                    if (index != -1)
                     {
-                        int index = GetDataIndex(m_vUnitUpgradeLevel, cd);
-                        if (index != -1)
-                        {
-                            m_vUnitUpgradeLevel[index].Value = level;
-                        }
-                        else
-                        {
-                            DataSlot ds = new DataSlot(cd, level);
-                            m_vUnitUpgradeLevel.Add(ds);
-                        }
-                        break;
+                        m_unitUpgradeLevel[index].Value = level;
                     }
+
+                    else
+                    {
+                        DataSlot ds = new DataSlot(cd, level);
+                        m_unitUpgradeLevel.Add(ds);
+                    }
+
+                    break;
+                }
             }
         }
     }
