@@ -7,17 +7,17 @@ namespace UCS.Files.Logic
 {
     internal class Data
     {
-        readonly int m_vGlobalID;
+        readonly int m_globalID;
 
         public Data(CSVRow row, DataTable dt)
         {
-            m_vCSVRow = row;
-            m_vDataTable = dt;
-            m_vGlobalID = GlobalID.CreateGlobalID(dt.GetTableIndex() + 1, dt.GetItemCount());
+            m_row = row;
+            m_dtTable = dt;
+            m_globalID = GlobalID.CreateGlobalID(dt.GetTableIndex() + 1, dt.GetItemCount());
         }
 
-        protected CSVRow m_vCSVRow;
-        protected DataTable m_vDataTable;
+        protected CSVRow m_row;
+        protected DataTable m_dtTable;
 
         public static void LoadData(Data obj, Type objectType, CSVRow row)
         {
@@ -40,6 +40,7 @@ namespace UCS.Files.Logic
                     for (var i = row.GetRowOffset(); i < row.GetRowOffset() + row.GetArraySize(prop.Name); i++)
                     {
                         var v = row.GetValue(prop.Name, i - row.GetRowOffset());
+
                         if (v == string.Empty && i != row.GetRowOffset())
                             v = indexerProp.GetValue(newList, new object[] { i - row.GetRowOffset() - 1 }).ToString();
 
@@ -48,11 +49,14 @@ namespace UCS.Files.Logic
                             var o = genericArgs[0].IsValueType ? Activator.CreateInstance(genericArgs[0]) : "";
                             add.Invoke(newList, new[] { o });
                         }
+
                         else
                             add.Invoke(newList, new[] { Convert.ChangeType(v, genericArgs[0]) });
                     }
+
                     prop.SetValue(obj, newList);
                 }
+
                 else
                 {
                     if (row.GetValue(prop.Name, 0) == string.Empty)
@@ -63,12 +67,24 @@ namespace UCS.Files.Logic
             }
         }
 
-        public int GetDataType() => m_vDataTable.GetTableIndex();
+        public int GetDataType()
+        {
+            return m_dtTable.GetTableIndex();
+        }
 
-        public int GetGlobalID() => m_vGlobalID;
+        public int GetGlobalID()
+        {
+            return this.m_globalID;
+        }
 
-        public int GetInstanceID() => GlobalID.GetInstanceID(m_vGlobalID);
+        public int GetInstanceID()
+        {
+            return GlobalID.GetInstanceID(this.m_globalID);
+        }
 
-        public string GetName()  => m_vCSVRow.GetName();
+        public string GetName()
+        {
+            return this.m_row.GetName();
+        }
     }
 }
