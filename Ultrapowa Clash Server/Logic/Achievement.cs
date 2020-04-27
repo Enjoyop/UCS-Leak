@@ -2,7 +2,17 @@ namespace UCS.Logic
 {
     internal class Achievement
     {
-        const int m_vType = 23000000;
+        const int m_type = 23000000;
+
+        public int Id => this.m_type + Index;
+
+        public int Index { get; set; }
+
+        public string Name { get; set; }
+
+        public bool Unlocked { get; set; }
+
+        public int Value { get; set; }
 
         public Achievement()
         {
@@ -10,16 +20,9 @@ namespace UCS.Logic
 
         public Achievement(int index)
         {
-            Index    = index;
-            Unlocked = false;
-            Value    = 0;
+            this.Index = index;
+            this.Unlocked = false;
+            this.Value = 0;
         }
-
-        public int Id => m_vType + Index;
-
-        public int Index { get; set; }
-        public string Name { get; set; }
-        public bool Unlocked { get; set; }
-        public int Value { get; set; }
     }
 }
