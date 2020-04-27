@@ -99,7 +99,7 @@ namespace UCS.Logic
 
         public int GetResourceCount(ResourceData rd)
         {
-            int index = GetDataIndex(m_vResources, rd);
+            int index = GetDataIndex(this.m_resources, rd);
             int count = 0;
 
             if (index != -1)
