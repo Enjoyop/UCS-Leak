@@ -7,33 +7,33 @@ namespace UCS.Logic
 {
     internal class Avatar
     {
+        protected List<DataSlot> m_heroHealth;
+        protected List<DataSlot> m_heroState;
+        protected List<DataSlot> m_heroUpgradeLevel;
+        protected List<DataSlot> m_resourceCaps;
+        protected List<DataSlot> m_resources;
+        protected List<DataSlot> m_spellCount;
+        protected List<DataSlot> m_spellUpgradeLevel;
+        protected List<DataSlot> m_unitCount;
+        protected List<DataSlot> m_unitUpgradeLevel;
+
+        protocted int m_castleLevel = -1;
+        protocted int m_castleTotalCapacity;
+        protocted int m_castleUsedCapacity;
+        internal int m_townHallLevel;
+
         public Avatar()
         {
-            m_vResources         = new List<DataSlot>();
-            m_vResourceCaps      = new List<DataSlot>();
-            m_vUnitCount         = new List<DataSlot>();
-            m_vUnitUpgradeLevel  = new List<DataSlot>();
-            m_vHeroHealth        = new List<DataSlot>();
-            m_vHeroUpgradeLevel  = new List<DataSlot>();
-            m_vHeroState         = new List<DataSlot>();
-            m_vSpellCount        = new List<DataSlot>();
-            m_vSpellUpgradeLevel = new List<DataSlot>();
+            this.m_resources         = new List<DataSlot>();
+            this.m_resourceCaps      = new List<DataSlot>();
+            this.m_unitCount         = new List<DataSlot>();
+            this.m_unitUpgradeLevel  = new List<DataSlot>();
+            this.m_heroHealth        = new List<DataSlot>();
+            this.m_heroUpgradeLevel  = new List<DataSlot>();
+            this.m_heroState         = new List<DataSlot>();
+            this.m_spellCount        = new List<DataSlot>();
+            this.m_spellUpgradeLevel = new List<DataSlot>();
         }
-
-        protected List<DataSlot> m_vHeroHealth;
-        protected List<DataSlot> m_vHeroState;
-        protected List<DataSlot> m_vHeroUpgradeLevel;
-        protected List<DataSlot> m_vResourceCaps;
-        protected List<DataSlot> m_vResources;
-        protected List<DataSlot> m_vSpellCount;
-        protected List<DataSlot> m_vSpellUpgradeLevel;
-        protected List<DataSlot> m_vUnitCount;
-        protected List<DataSlot> m_vUnitUpgradeLevel;
-
-        int m_vCastleLevel = -1;
-        int m_vCastleTotalCapacity;
-        int m_vCastleUsedCapacity;
-        internal int m_vTownHallLevel;
 
         public static int GetDataIndex(List<DataSlot> dsl, Data d) => dsl.FindIndex(ds => ds.Data == d);
 
@@ -45,9 +45,11 @@ namespace UCS.Logic
                 {
                     int resourceCount = GetResourceCount((ResourceData) data);
                     int newResourceValue = Math.Max(resourceCount + count, 0);
+
                     if (count >= 1)
                     {
                         int resourceCap = GetResourceCap((ResourceData) data);
+
                         if (resourceCount < resourceCap)
                         {
                             if (newResourceValue > resourceCap)
@@ -56,103 +58,143 @@ namespace UCS.Logic
                             }
                         }
                     }
+
                     SetResourceCount((ResourceData) data, newResourceValue);
                 }
             }
         }
 
-        public int GetAllianceCastleLevel() => m_vCastleLevel;
+        public int GetAllianceCastleLevel()
+        {
+            return this.m_castleLevel;
+        }
 
-        public int GetAllianceCastleTotalCapacity() => m_vCastleTotalCapacity;
+        public int GetAllianceCastleTotalCapacity()
+        {
+            return this.m_castleTotalCapacity;
+        }
 
-        public int GetAllianceCastleUsedCapacity() => m_vCastleUsedCapacity;
+        public int GetAllianceCastleUsedCapacity()
+        {
+            return this.m_castleUsedCapacity;
+        }
 
         public int GetResourceCap(ResourceData rd)
         {
-            int index = GetDataIndex(m_vResourceCaps, rd);
+            int index = GetDataIndex(this.m_resourceCaps, rd);
             int count = 0;
+
             if (index != -1)
             {
-                count = m_vResourceCaps[index].Value;
+                count = m_resourceCaps[index].Value;
             }
+
             return count;
         }
 
-        public List<DataSlot> GetResourceCaps() => m_vResourceCaps;
+        public List<DataSlot> GetResourceCaps()
+        {
+             return this.m_resourceCaps;
+        }
 
         public int GetResourceCount(ResourceData rd)
         {
             int index = GetDataIndex(m_vResources, rd);
             int count = 0;
+
             if (index != -1)
             {
-                count = m_vResources[index].Value;
+                count = m_resources[index].Value;
             }
+
             return count;
         }
 
-        public List<DataSlot> GetResources() => m_vResources;
+        public List<DataSlot> GetResources()
+        {
+            return this.m_resources;
+        }
 
-        public List<DataSlot> GetSpells() => m_vSpellCount;
+        public List<DataSlot> GetSpells()
+        {
+            return this.m_spellCount;
+        }
 
         public int GetUnitCount(CombatItemData cd)
         {
             int result = 0;
+
             if (cd.GetCombatItemType() == 1)
             {
-                int index = GetDataIndex(m_vSpellCount, cd);
+                int index = GetDataIndex(this.m_spellCount, cd);
+
                 if (index != -1)
                 {
-                    result = m_vSpellCount[index].Value;
+                    result = m_spellCount[index].Value;
                 }
             }
+
             else
             {
                 int index = GetDataIndex(m_vUnitCount, cd);
+
                 if (index != -1)
                 {
-                    result = m_vUnitCount[index].Value;
+                    result = m_unitCount[index].Value;
                 }
             }
+
             return result;
         }
 
-        public List<DataSlot> GetUnits() => m_vUnitCount;
+        public List<DataSlot> GetUnits()
+        {
+            return this.m_unitCount;
+        }
 
         public int GetUnitUpgradeLevel(CombatItemData cd)
         {
             int result = 0;
+
             switch (cd.GetCombatItemType())
             {
                 case 2:
+                {
+                    int index = GetDataIndex(this.m_heroUpgradeLevel, cd);
+
+                    if (index != -1)
                     {
-                        int index = GetDataIndex(m_vHeroUpgradeLevel, cd);
-                        if (index != -1)
-                        {
-                            result = m_vHeroUpgradeLevel[index].Value;
-                        }
-                        break;
-                    }
-                case 1:
-                    {
-                        int index = GetDataIndex(m_vSpellUpgradeLevel, cd);
-                        if (index != -1)
-                        {
-                            result = m_vSpellUpgradeLevel[index].Value;
-                        }
-                        break;
+                        result = m_heroUpgradeLevel[index].Value;
                     }
 
-                default:
+                    break;
+                }
+
+                case 1:
+                {
+                    int index = GetDataIndex(this.m_spellUpgradeLevel, cd);
+
+                    if (index != -1)
                     {
-                        int index = GetDataIndex(m_vUnitUpgradeLevel, cd);
-                        if (index != -1)
-                        {
-                            result = m_vUnitUpgradeLevel[index].Value;
-                        }
-                        break;
+                            result = m_spellUpgradeLevel[index].Value;
                     }
+
+                    break;
+                }
+
+                default:
+                {
+                    int index = GetDataIndex(this.m_unitUpgradeLevel, cd);
+
+                    if (index != -1)
+                    {
+                        result = m_unitUpgradeLevel[index].Value;
+                    }
+
+                    break;
+                }
             }
+
             return result;
         }
 
@@ -160,73 +202,79 @@ namespace UCS.Logic
         {
             int resourceCount = GetResourceCount(rd);
             int resourceCap   = GetResourceCap(rd);
+
             return Math.Max(resourceCap - resourceCount, 0);
         }
 
-        public void SetAllianceCastleLevel(int level)
+        public void SetAllianceCastleLevel(int lvl)
         {
-            m_vCastleLevel = level;
+            this.m_castleLevel = lvl;
         }
 
         public void IncrementAllianceCastleLevel()
         {
-            m_vCastleLevel++;
-        }
-        public void DeIncrementAllianceCastleLevel()
-        {
-            m_vCastleLevel--;
+            this.m_castleLevel++;
         }
 
-        public void SetTownHallLevel(int level)
+        public void DeIncrementAllianceCastleLevel()
         {
-            m_vTownHallLevel = level;
+            this.m_castleLevel--;
+        }
+
+        public void SetTownHallLevel(int lvl)
+        {
+            this.m_townHallLevel = lvl;
         }
 
         public void IncrementTownHallLevel()
         {
-            m_vTownHallLevel++;
+            this.m_townHallLevel++;
         }
 
         public void DeIncrementTownHallLevel()
         {
-            m_vTownHallLevel--;
+            this.m_townHallLevel--;
         }
 
         public void SetAllianceCastleTotalCapacity(int totalCapacity)
         {
-            m_vCastleTotalCapacity = totalCapacity;
+            this.m_castleTotalCapacity = totalCapacity;
         }
 
         public void SetAllianceCastleUsedCapacity(int usedCapacity)
         {
-            m_vCastleUsedCapacity = usedCapacity;
+            this.m_castleUsedCapacity = usedCapacity;
         }
 
         public void SetHeroHealth(HeroData hd, int health)
         {
-            int index = GetDataIndex(m_vHeroHealth, hd);
+            int index = GetDataIndex(this.m_heroHealth, hd);
+
             if (index == -1)
             {
                 DataSlot ds = new DataSlot(hd, health);
-                m_vHeroHealth.Add(ds);
+                m_heroHealth.Add(ds);
             }
+
             else
             {
-                m_vHeroHealth[index].Value = health;
+                m_heroHealth[index].Value = health;
             }
         }
 
         public void SetHeroState(HeroData hd, int state)
         {
-            int index = GetDataIndex(m_vHeroState, hd);
+            int index = GetDataIndex(this.m_heroState, hd);
+
             if (index == -1)
             {
                 DataSlot ds = new DataSlot(hd, state);
-                m_vHeroState.Add(ds);
+                m_heroState.Add(ds);
             }
+
             else
             {
-                m_vHeroState[index].Value = state;
+                m_heroState[index].Value = state;
             }
         }
 
