@@ -35,7 +35,7 @@ namespace UCS.Files.Logic
 
         public int AmmoCount { get; set; }
 
-        public string AmmoResource { get; set; }
+        public List<string> AmmoResource { get; set; }
 
         public string AOESpell { get; set; }
 
@@ -301,47 +301,100 @@ namespace UCS.Files.Logic
 
         public int Width { get; set; }
 
-        public ResourceData GetAltBuildResource(int level) => CSVManager.DataTables.GetResourceByName(AltBuildResource[level]);
+        public ResourceData GetAltBuildResource(int level)
+        {
+            return CSVManager.DataTables.GetResourceByName(this.AltBuildResource[level]);
+        }
 
-        public override int GetBuildCost(int level) => BuildCost[level];
+        public override int GetBuildCost(int level)
+        {
+            return this.BuildCost[level];
+        }
 
-        public string GetBuildingClass() => BuildingClass;
+        public string GetBuildingClass()
+        {
+            return this.BuildingClass;
+        }
 
-        public override ResourceData GetBuildResource(int level) => CSVManager.DataTables.GetResourceByName(BuildResource[level]);
+        public override ResourceData GetBuildResource(int level)
+        {
+            return CSVManager.DataTables.GetResourceByName(this.BuildResource[level]);
+        }
 
-        public override int GetConstructionTime(int level) => BuildTimeS[level] + BuildTimeM[level] * 60 + BuildTimeH[level] * 60 * 60 + BuildTimeD[level] * 60 * 60 * 24;
+        public ResourceData GetAmmoResource(int level)
+        {
+            return CSVManager.DataTables.GetResourceByName(this.AmmoResource[level]);
+        }
+
+        public ResourceData GetProducesResource()
+        {
+            return CSVManager.DataTables.GetResourceByName(this.ProducesResource);
+        }
+
+        public override int GetConstructionTime(int level)
+        {
+            return this.BuildTimeS[level]
+                 + this.BuildTimeM[level] * 60
+                 + this.BuildTimeH[level] * 3600
+                 + this.BuildTimeD[level] * 86400;
+        }
 
         public List<int> GetMaxStoredResourceCounts(int level)
         {
             var maxStoredResourceCounts = new List<int>();
             var resourceDataTable = CSVManager.DataTables.GetTable(2);
+
             for (var i = 0; i < resourceDataTable.GetItemCount(); i++)
             {
                 var value = 0;
                 var resourceData = (ResourceData) resourceDataTable.GetItemAt(i);
                 var propertyName = "MaxStored" + resourceData.GetName();
+
                 if (GetType().GetProperty(propertyName) != null)
                 {
                     var obj = GetType().GetProperty(propertyName).GetValue(this, null);
                     value = ((List<int>) obj)[level];
                 }
+
                 maxStoredResourceCounts.Add(value);
             }
+
             return maxStoredResourceCounts;
         }
 
-        public override int GetRequiredTownHallLevel(int level) => TownHallLevel[level] - 1;
+        public override int GetRequiredTownHallLevel(int level)
+        {
+            return this.TownHallLevel[level] - 1;
+        }
 
-        public int GetUnitProduction(int level) => UnitProduction[level];
+        public int GetUnitProduction(int level)
+        {
+            return this.UnitProduction[level];
+        }
 
-        public int GetUnitStorageCapacity(int level) => HousingSpace[level];
+        public int GetUnitStorageCapacity(int level)
+        {
+            return this.HousingSpace[level];
+        }
 
-        public override int GetUpgradeLevelCount() => BuildCost.Count;
+        public override int GetUpgradeLevelCount()
+        {
+            return this.BuildCost.Count;
+        }
 
-        public bool IsSpellForge() => ForgesSpells || ForgesMiniSpells;
+        public bool IsSpellForge()
+        {
+            return this.ForgesSpells || this.ForgesMiniSpells;
+        }
 
-        public override bool IsTownHall() => BuildingClass == "Town Hall";
+        public override bool IsTownHall()
+        {
+            return this.BuildingClass == "Town Hall";
+        }
 
-        public bool IsWorkerBuilding() => BuildingClass == "Worker";
+        public bool IsWorkerBuilding()
+        {
+            return this.BuildingClass == "Worker";
+        }
     }
 }
